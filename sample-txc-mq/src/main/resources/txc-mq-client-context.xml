@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- MQ相关设定 -->
+	<bean class="com.taobao.txc.client.aop.MTRelationShipManager">
+		<property name="beanNames" ref="mtServicesClassList" />
+		<property name="interceptorNames">
+			<list>
+				<value>mtBranchInterceptor</value>
+			</list>
+		</property>
+		<property name="order" value="1"></property>
+		<property name="proxyTargetClass" value="false"></property>
+	</bean>
+    <bean id="mtBranchInterceptor" class="com.taobao.txc.resourcemanager.mt.MtBranchInterceptor"/>
+    <bean id="mtServicesClassList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>com.taobao.txc.rm.mq.TxcMQProducer</value>
+            </list>
+        </property>
+    </bean>
+    <!--xxx 请用私有账户下的资源进行替换-->
+    <bean id="txc_mq_producer" class="com.taobao.txc.rm.mq.TxcMQProducerImpl">
+        <constructor-arg name="ProducerId" value="PID_xxx"/>
+        <constructor-arg name="AccessKey" value="xxx"/>
+        <constructor-arg name="SecretKey" value="xxx"/>
+    </bean>
+	<!-- 我们的测试用例中模拟了跨两个数据库的情况，所以指定了两个数据源 -->	
+    <bean id="txcDataSource1" class="com.taobao.txc.datasource.cobar.TxcDataSource">
+	    <property name="url" value="jdbc:mysql://xxx:3306/sample" />
+	    <property name="username" value="xxx" />
+	    <property name="password" value="xxx" />
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+    <bean id="jdbcTemplate1" class="org.springframework.jdbc.core.JdbcTemplate">
+    	<property name="dataSource" ref="txcDataSource1" />
+    </bean>
+    <bean id="txcDataSource2" class="com.taobao.txc.datasource.cobar.TxcDataSource">
+	    <property name="url" value="jdbc:mysql://xxx:3306/sample" />
+	    <property name="username" value="xxx" />
+	    <property name="password" value="xxx" />
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+    <bean id="jdbcTemplate2" class="org.springframework.jdbc.core.JdbcTemplate">
+    	<property name="dataSource" ref="txcDataSource2" />
+    </bean>
+	<!-- 定义声明式事务，要想让事务annotation感知的话，要在这里定义一下，spring才能感知到噢 -->
+    <!--xxx 请用私有账户下的资源进行替换-->
+    <bean class="com.taobao.txc.client.aop.TxcTransactionScaner">
+        <constructor-arg value="xxx" type="java.lang.String"/>
+        <constructor-arg value="3" type="int"/>
+        <property name="accessKey" value="xxx"/>
+        <property name="secretKey" value="xxx"/>
+    </bean>
+	<bean id="clientTest" class="com.taobao.txc.tests.SampleClient" />
+</beans>

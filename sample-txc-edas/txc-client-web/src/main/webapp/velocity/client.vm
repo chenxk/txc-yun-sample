@@ -1,0 +1,18 @@
+<p>xid: $xid</p>
+<p>inc_money: $inc_money</p>
+<p>dec_money: $dec_money</p>
+<p>level: $level</p>
+
+<HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+
+<p>RESET</p>
+<form action="client/reset" method="post">
+    <input type="text" name="money" title="money"/>
+    <input type="submit" value="ÖØÖÃ">
+</form>
+
+<p>PAY</p>
+<form action="client/pay" method="post">
+    <input type="text" name="money" title="money"/>
+    <input type="submit" value="¸¶Ç®">
+</form>

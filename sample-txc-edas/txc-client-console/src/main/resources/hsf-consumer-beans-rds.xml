@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hsf="http://www.taobao.com/hsf"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.taobao.com/hsf
+       http://www.taobao.com/hsf/hsf.xsd" default-autowire="byName">
+   	<hsf:consumer id="incMoneyService_rds" interface="com.taobao.txc.tests.IIncMoneyService"
+    version="1.1.2" group="txc-edas-rds-test1">
+    </hsf:consumer>    
+   	<hsf:consumer id="decMoneyService_rds" interface="com.taobao.txc.tests.IDecMoneyService"
+    version="1.1.2" group="txc-edas-rds-test1">
+    </hsf:consumer>
+   	<hsf:consumer id="updateLevelService_rds" interface="com.taobao.txc.tests.IUpdateLevelService"
+    version="1.1.2" group="txc-edas-rds-test1">
+    </hsf:consumer>    
+</beans>

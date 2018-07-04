@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hsf="http://www.taobao.com/hsf"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.taobao.com/hsf
+       http://www.taobao.com/hsf/hsf.xsd" default-autowire="byName">
+    <!--xxx 请用私有账户下的资源进行替换-->
+    <bean class="com.taobao.txc.client.aop.TxcTransactionScaner">
+        <constructor-arg value="xxx"/>
+        <property name="accessKey" value="xxx"/>
+        <property name="secretKey" value="xxx"/>
+    </bean>
+    <bean id="incMoneyService_drds" class="com.taobao.txc.tests.impl.IncMoney_drds" init-method="init"/>
+    <bean id="incMoneyService_rds" class="com.taobao.txc.tests.impl.IncMoney_rds" init-method="init"/>
+    <bean id="decMoneyService_drds" class="com.taobao.txc.tests.impl.DecMoney_drds" init-method="init"/>
+    <bean id="decMoneyService_rds" class="com.taobao.txc.tests.impl.DecMoney_rds" init-method="init"/>
+    <hsf:provider id="incMoneyServiceProvider1" interface="com.taobao.txc.tests.IIncMoneyService"
+        ref="incMoneyService_drds" version="1.1.1" group="txc-edas-drds-test1" enableTXC="true">
+    </hsf:provider>
+    <hsf:provider id="incMoneyServiceProvider2" interface="com.taobao.txc.tests.IIncMoneyService"
+        ref="incMoneyService_rds" version="1.1.2" group="txc-edas-rds-test1" enableTXC="true">
+    </hsf:provider>
+    <hsf:provider id="decMoneyServiceProvider1" interface="com.taobao.txc.tests.IDecMoneyService"
+        ref="decMoneyService_drds" version="1.1.1" group="txc-edas-drds-test1" enableTXC="true">
+    </hsf:provider>
+    <hsf:provider id="decMoneyServiceProvider2" interface="com.taobao.txc.tests.IDecMoneyService"
+        ref="decMoneyService_rds" version="1.1.2" group="txc-edas-rds-test1" enableTXC="true">
+    </hsf:provider>
+</beans>

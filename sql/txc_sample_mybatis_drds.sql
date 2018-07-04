@@ -1,0 +1,1 @@
+create table test1(id int, name varchar(30), primary key(id)) dbpartition by hash(id);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<groupId>txc-test</groupId>
+    <artifactId>txc-yun-sample</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>   
+    <properties>
+        <spring-version>3.2.17.RELEASE</spring-version>
+    </properties>
+    <modules>
+        <module>sample-mq-consumer</module>
+        <module>sample-txc-drds</module>
+        <module>sample-txc-dubbo</module>
+        <module>sample-txc-edas</module>
+        <module>sample-txc-mq</module>
+        <module>sample-txc-mt-compensate-simple</module>
+        <module>sample-txc-mt-reserve-simple</module>
+        <module>sample-txc-mybatis-drds</module>
+        <module>sample-txc-oracle-simple</module>
+        <module>sample-txc-simple</module>
+        <module>sample-txc-simple-springfree</module>
+        <module>sample-txc-springboot</module>
+        <module>sample-txc-springcloud</module>
+    </modules>
+   
+</project>

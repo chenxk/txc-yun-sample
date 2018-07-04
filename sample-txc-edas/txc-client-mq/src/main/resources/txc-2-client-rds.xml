@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+    <import resource="hsf-consumer-beans-rds.xml"/>
+	<!-- mq相关定义 -->
+    <bean class="com.taobao.txc.client.aop.MTRelationShipManager">
+        <property name="beanNames" ref="mtServicesClassList" />
+        <property name="interceptorNames">
+            <list>
+                <value>mtBranchInterceptor</value>
+            </list>
+        </property>
+        <property name="order" value="1"></property>
+        <property name="proxyTargetClass" value="false"></property>
+    </bean>
+    <bean id="mtBranchInterceptor" class="com.taobao.txc.resourcemanager.mt.MtBranchInterceptor"/>
+    <bean id="mtServicesClassList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>com.taobao.txc.rm.mq.TxcMQProducer</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="txc_mq_producer" class="com.taobao.txc.rm.mq.TxcMQProducerImpl">
+        <constructor-arg name="ProducerId" value="PID_xxx"/>
+        <constructor-arg name="AccessKey" value="xxx"/>
+        <constructor-arg name="SecretKey" value="xxx"/>
+    </bean>
+	<!-- txc组和模式定义 -->
+    <!--xxx 请用私有账户下的资源进行替换-->
+    <bean class="com.taobao.txc.client.aop.TxcTransactionScaner">
+        <constructor-arg value="xxx" type="java.lang.String"/>
+        <constructor-arg value="3" type="int"/>
+        <property name="accessKey" value="xxx"/>
+        <property name="secretKey" value="xxx"/>
+    </bean>
+
+    <bean id="bussiness" class="com.taobao.txc.tests.Client" init-method="init"/>
+</beans>

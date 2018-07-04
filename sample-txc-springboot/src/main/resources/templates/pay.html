@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8" />
+    <title>初始化金额</title>
+</head>
+<body>
+<form action="/setmoney" name="loginfrom" accept-charset="utf-8" method="post">
+    <label class="label-tips" for="u">重置金额:</label>
+    <input type="text" id="u" name="money" class="inputstyle"/>
+    <input type="submit" name="重置"/>
+</form>
+<form action="/paymoney" name="loginfrom1" accept-charset="utf-8" method="post">
+    <label class="label-tips" for="u">转账金额:</label>
+    <input type="text" id="u1" name="money" class="inputstyle"/>
+    <input  type="submit" name="转账">（A->B)</input>
+</form>
+<font color="red" th:text="${errinfo}">This is some text!</font>
+<div>
+    <label class="label-tips" for="u" >A账户余额:</label>
+    <label class="label-tips" for="u" th:text="${accountA}">A:</label>
+</div>
+<div>
+    <label class="label-tips" for="u" >B账户余额:</label>
+    <label class="label-tips" for="u" th:text="${accountB}">A:</label>
+</div>
+</body>
+</html>

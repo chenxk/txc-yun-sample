@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--database config-->
+    <!--xxx 请用私有账户下的资源进行替换-->
+    <bean id="txcDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="url" value="jdbc:mysql://xxx:3306/txc_test1" />
+        <property name="username" value="xxx" />
+        <property name="password" value="xxx" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+
+    <bean class="com.taobao.txc.client.aop.TxcTransactionScaner">
+        <constructor-arg value="xxx"/>
+        <property name="accessKey" value="xxx"/>
+        <property name="secretKey" value="xxx"/>
+    </bean>
+    <bean id="clientTest" class="com.taobao.txc.tests.SampleAnnotationDrds" />
+</beans>

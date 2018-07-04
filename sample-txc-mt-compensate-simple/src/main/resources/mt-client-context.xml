@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="mtBranchInterceptor" class="com.taobao.txc.resourcemanager.mt.MtBranchInterceptor"/>
+    <bean id="mtServicesClassList" class="org.springframework.beans.factory.config.ListFactoryBean">
+        <property name="sourceList">
+            <list>
+                <value>com.taobao.txc.tests.MtServiceRollin</value>
+                <value>com.taobao.txc.tests.MtServiceRollout</value>
+            </list>
+        </property>
+    </bean>
+    <bean class="com.taobao.txc.client.aop.MTRelationShipManager">
+        <property name="beanNames" ref="mtServicesClassList" />
+        <property name="interceptorNames">
+            <list>
+                <value>mtBranchInterceptor</value>
+            </list>
+        </property>
+        <property name="order" value="1"></property>
+        <property name="proxyTargetClass" value="false"></property>
+    </bean>
+    <!-- 开始数据源，模板定义 -->
+    <bean id="txcDataSource1" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="jdbc:mysql://10.101.84.111:3306/txc_mt" />
+        <property name="username" value="txcuser" />
+        <property name="password" value="Hello1234" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+
+    <bean id="jdbcTemplate1" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="txcDataSource1" />
+    </bean>
+
+    <bean id="txcDataSource2" class="com.alibaba.druid.pool.DruidDataSource"
+          destroy-method="close">
+        <property name="url" value="jdbc:mysql://10.101.84.112:3306/txc_mt" />
+        <property name="username" value="txcuser" />
+        <property name="password" value="Hello1234" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    </bean>
+
+    <bean id="jdbcTemplate2" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="txcDataSource2" />
+    </bean>
+
+    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="txcDataSource1" />
+    </bean>
+
+    <bean id="transactionTemplate1" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager1" />
+    </bean>
+
+    <bean id="transactionManager2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="txcDataSource2" />
+    </bean>
+
+    <bean id="transactionTemplate2" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="transactionManager2" />
+    </bean>
+    <!-- 结束数据源，模板定义 -->
+
+    <!-- 定义声明式事务，要想让事务annotation感知的话，要在这里定义一下，spring才能感知到噢 -->
+    <bean class="com.taobao.txc.client.aop.TxcTransactionScaner">
+        <constructor-arg value="sample1" /> <!-- 业务自定义名，由业务方指定，用于区分不同业务 -->
+        <constructor-arg value="daily_txc2" /> <!-- TxcServer 分组名，请联系TXC项目组索取 daily_txc2/fast-->
+        <constructor-arg value="2" type="int"/> <!-- 1:AT 2:MT 3:AT&MT 4:RT 5:AT&RT 6:MT&RT 7:AT&MT&RT -->
+    </bean>
+    <!-- 定义声明式事务 -->
+    <bean id="clientTest" class="com.taobao.txc.tests.MtResourceCompensateClient" />
+
+    <!-- 定义mt服务 -->
+    <bean id="MtServiceBean1" class="com.taobao.txc.tests.MtServiceRollinImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate1"></property>
+        <property name="transactionTemplate" ref="transactionTemplate1"></property>
+    </bean>
+    <!-- 定义mt服务 -->
+    <bean id="MtServiceBean2" class="com.taobao.txc.tests.MtServiceRolloutImpl">
+        <property name="jdbcTemplate" ref="jdbcTemplate2"></property>
+        <property name="transactionTemplate" ref="transactionTemplate2"></property>
+    </bean>
+</beans>
